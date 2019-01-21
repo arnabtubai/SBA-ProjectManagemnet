@@ -94,7 +94,9 @@ namespace ProjectManagement.Controllers
             {
                 return NotFound();
             }
-
+            List<Tasks> taskList = db.Tasks.Where(x => x.User_ID == users.User_ID).ToList();
+           
+            db.Tasks.RemoveRange(taskList);
             db.Users.Remove(users);
             db.SaveChanges();
 

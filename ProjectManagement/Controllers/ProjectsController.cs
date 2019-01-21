@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using AutoMapper;
 using ProjectManagement.Models;
 
 namespace ProjectManagement.Controllers
@@ -17,9 +18,28 @@ namespace ProjectManagement.Controllers
         private ProjectManagementContext db = new ProjectManagementContext();
 
         // GET: api/Projects
-        public IQueryable<Projects> GetProjects()
+        public List<ProjectViewModel> GetProjects()
         {
-            return db.Projects;
+            List<Projects> projects = db.Projects.ToList();
+
+            var config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<Projects, ProjectViewModel>().ForMember(destination => destination.NumberOfTasks,
+
+               opts => opts.MapFrom(source => db.Tasks.Where(x => x.Project_ID == source.Project_ID).Count())).ForMember(destination => destination.StartDate,
+
+               opts => opts.MapFrom(source => source.StartDate.Value.ToString("yyyy-MM-dd")))
+               .ForMember(destination => destination.EndDate,
+
+               opts => opts.MapFrom(source => source.EndDate.Value.ToString("yyyy-MM-dd"))); ;
+
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+
+            List<ProjectViewModel> ProjectView = iMapper.Map<List<Projects>, List<ProjectViewModel>>(projects);
+            return ProjectView;
         }
 
         // GET: api/Projects/5
@@ -27,12 +47,30 @@ namespace ProjectManagement.Controllers
         public IHttpActionResult GetProjects(int id)
         {
             Projects projects = db.Projects.Find(id);
-            if (projects == null)
+          
+            var config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<Projects, ProjectViewModel>().ForMember(destination => destination.NumberOfTasks,
+
+               opts => opts.MapFrom(source => db.Tasks.Where(x=> x.Project_ID==source.Project_ID).Count())).ForMember(destination => destination.StartDate,
+
+               opts => opts.MapFrom(source => source.StartDate.Value.ToString("yyyy-MM-dd")))
+               .ForMember(destination => destination.EndDate,
+
+               opts => opts.MapFrom(source => source.EndDate.Value.ToString("yyyy-MM-dd"))); ;
+
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+
+            ProjectViewModel ProjectView = iMapper.Map<Projects, ProjectViewModel>(projects);
+            if (ProjectView == null)
             {
                 return NotFound();
             }
 
-            return Ok(projects);
+            return Ok(ProjectView);
         }
 
         // PUT: api/Projects/5
@@ -94,7 +132,8 @@ namespace ProjectManagement.Controllers
             {
                 return NotFound();
             }
-
+            List<Tasks> lTask = db.Tasks.Where(z => z.Project_ID == projects.Project_ID).ToList();
+            db.Tasks.RemoveRange(lTask);
             db.Projects.Remove(projects);
             db.SaveChanges();
 

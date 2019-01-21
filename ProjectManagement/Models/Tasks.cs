@@ -18,6 +18,9 @@ namespace ProjectManagement.Models
         [Required]
         public int Project_ID { get; set; }
 
+      
+        public int User_ID { get; set; }
+
         [Required]
         [StringLength(150)]
         public string Task { get; set; }
@@ -34,8 +37,7 @@ namespace ProjectManagement.Models
 
         public virtual Projects Projects { get; set; }
 
-        public virtual List<Tasks> TaskList { get; set; }
 
-        public virtual Tasks TaskMapping { get; set; }
+      
     }
 }

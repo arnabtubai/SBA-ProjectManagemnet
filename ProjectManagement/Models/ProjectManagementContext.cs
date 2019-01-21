@@ -17,10 +17,7 @@ namespace ProjectManagement.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Tasks>()
-                .HasMany(e => e.TaskList)
-                .WithRequired(e => e.TaskMapping)
-                .HasForeignKey(e => e.Parent_ID);
+           
         }
 
         public System.Data.Entity.DbSet<ProjectManagement.Models.Users> Users { get; set; }

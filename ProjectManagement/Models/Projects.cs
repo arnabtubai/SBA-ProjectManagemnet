@@ -17,11 +17,12 @@ namespace ProjectManagement.Models
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
-        [Required]
+
         public int Priority { get; set; }
         
         public int User_ID { get; set; }
-
+        [Required]
+        public bool? Completed { get; set; }
         public virtual Users Users { get; set; }
     }
 }

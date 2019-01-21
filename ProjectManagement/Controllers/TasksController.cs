@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using AutoMapper;
 using ProjectManagement.Models;
 
 namespace ProjectManagement.Controllers
@@ -17,9 +18,29 @@ namespace ProjectManagement.Controllers
         private ProjectManagementContext db = new ProjectManagementContext();
 
         // GET: api/Tasks
-        public IQueryable<Tasks> GetTasks()
+        public List<TaskViewModel> GetTasks()
         {
-            return db.Tasks;
+            List<Tasks> Tasks = db.Tasks.ToList();
+            var config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<Tasks, TaskViewModel>().ForMember(destination => destination.ParentTask,
+
+               opts => opts.MapFrom(source => db.Tasks.Find(source.Parent_ID).Task))
+               .ForMember(destination => destination.StartDate,
+
+               opts => opts.MapFrom(source =>source.StartDate.Value.ToString("yyyy-MM-dd")))
+               .ForMember(destination => destination.EndDate,
+
+               opts => opts.MapFrom(source => source.EndDate.Value.ToString("yyyy-MM-dd"))); ;
+
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+
+            List<TaskViewModel> TaskView = iMapper.Map <List<Tasks>, List<TaskViewModel> >(Tasks);
+          
+            return TaskView;
         }
 
         // GET: api/Tasks/5
@@ -27,12 +48,29 @@ namespace ProjectManagement.Controllers
         public IHttpActionResult GetTasks(int id)
         {
             Tasks Tasks = db.Tasks.Find(id);
-            if (Tasks == null)
+            var config = new MapperConfiguration(cfg => {
+
+                cfg.CreateMap<Tasks, TaskViewModel>().ForMember(destination => destination.ParentTask,
+
+               opts => opts.MapFrom(source =>db.Tasks.Find(source.Parent_ID).Task)).ForMember(destination => destination.StartDate,
+
+               opts => opts.MapFrom(source => source.StartDate.Value.ToString("yyyy-MM-dd")))
+               .ForMember(destination => destination.EndDate,
+
+               opts => opts.MapFrom(source => source.EndDate.Value.ToString("yyyy-MM-dd"))); ;
+
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+
+            TaskViewModel TaskView = iMapper.Map<Tasks, TaskViewModel>(Tasks);
+            if (TaskView == null)
             {
                 return NotFound();
             }
 
-            return Ok(Tasks);
+            return Ok(TaskView);
         }
 
         // PUT: api/Tasks/5
