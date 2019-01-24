@@ -8,101 +8,51 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using AutoMapper;
-using ProjectManagement.Models;
+using ProjectManagement.Entity;
+using ProjectMangement.Business;
+
 
 namespace ProjectManagement.Controllers
 {
     public class TasksController : ApiController
     {
-        private ProjectManagementContext db = new ProjectManagementContext();
+        private TaskLogic taskBL = new TaskLogic();
 
         // GET: api/Tasks
         public List<TaskViewModel> GetTasks()
         {
-            List<Tasks> Tasks = db.Tasks.ToList();
-            var config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<Tasks, TaskViewModel>().ForMember(destination => destination.ParentTask,
-
-               opts => opts.MapFrom(source => db.Tasks.Find(source.Parent_ID).Task))
-               .ForMember(destination => destination.StartDate,
-
-               opts => opts.MapFrom(source =>source.StartDate.Value.ToString("yyyy-MM-dd")))
-               .ForMember(destination => destination.EndDate,
-
-               opts => opts.MapFrom(source => source.EndDate.Value.ToString("yyyy-MM-dd"))); ;
-
-            });
-
-            IMapper iMapper = config.CreateMapper();
-
-
-            List<TaskViewModel> TaskView = iMapper.Map <List<Tasks>, List<TaskViewModel> >(Tasks);
-          
-            return TaskView;
+            return taskBL.GetTasks();
         }
 
         // GET: api/Tasks/5
         [ResponseType(typeof(Tasks))]
         public IHttpActionResult GetTasks(int id)
         {
-            Tasks Tasks = db.Tasks.Find(id);
-            var config = new MapperConfiguration(cfg => {
-
-                cfg.CreateMap<Tasks, TaskViewModel>().ForMember(destination => destination.ParentTask,
-
-               opts => opts.MapFrom(source =>db.Tasks.Find(source.Parent_ID).Task)).ForMember(destination => destination.StartDate,
-
-               opts => opts.MapFrom(source => source.StartDate.Value.ToString("yyyy-MM-dd")))
-               .ForMember(destination => destination.EndDate,
-
-               opts => opts.MapFrom(source => source.EndDate.Value.ToString("yyyy-MM-dd"))); ;
-
-            });
-
-            IMapper iMapper = config.CreateMapper();
-
-
-            TaskViewModel TaskView = iMapper.Map<Tasks, TaskViewModel>(Tasks);
-            if (TaskView == null)
+            TaskViewModel task = null;
+            try
             {
-                return NotFound();
+                task = taskBL.GetTasks(id);
+                if (task == null) return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
 
-            return Ok(TaskView);
+            return Ok(task);
         }
 
         // PUT: api/Tasks/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutTasks(int id, Tasks Tasks)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != Tasks.Task_ID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(Tasks).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
+                taskBL.PutTasks(id, Tasks);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!TasksExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -112,13 +62,14 @@ namespace ProjectManagement.Controllers
         [ResponseType(typeof(Tasks))]
         public IHttpActionResult PostTasks(Tasks Tasks)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                taskBL.PostTasks(Tasks);
             }
-
-            db.Tasks.Add(Tasks);
-            db.SaveChanges();
+            catch (Exception)
+            {
+                return BadRequest();
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = Tasks.Task_ID }, Tasks);
         }
@@ -127,30 +78,20 @@ namespace ProjectManagement.Controllers
         [ResponseType(typeof(Tasks))]
         public IHttpActionResult DeleteTasks(int id)
         {
-            Tasks Tasks = db.Tasks.Find(id);
-            if (Tasks == null)
+            Tasks tasks = null;
+            try
             {
-                return NotFound();
+                tasks =taskBL.DeleteTasks(id);
+                if (tasks == null) return NotFound();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
             }
 
-            db.Tasks.Remove(Tasks);
-            db.SaveChanges();
-
-            return Ok(Tasks);
+            return Ok(tasks);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool TasksExists(int id)
-        {
-            return db.Tasks.Count(e => e.Task_ID == id) > 0;
-        }
+       
     }
 }

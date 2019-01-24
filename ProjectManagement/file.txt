@@ -1,0 +1,9 @@
+2019-01-23 21:35:56.6144|INFO|ProjectMangement.Business.UserLogic|Entity of type "Users" in state "Added" has the following validation errors:
+2019-01-23 21:35:56.6854|ERROR|ProjectMangement.Business.UserLogic|- Property: "FirstName", Error: "The field FirstName must be a string with a maximum length of 50."
+2019-01-23 21:35:56.6854|ERROR|ProjectMangement.Business.UserLogic|- Property: "EmployeeId", Error: "The field EmployeeId must be a string with a maximum length of 10."
+2019-01-23 21:37:38.5297|INFO|ProjectMangement.Business.UserLogic|Entity of type "Users" in state "Added" has the following validation errors:
+2019-01-23 21:37:42.5999|ERROR|ProjectMangement.Business.UserLogic|- Property: "FirstName", Error: "The field FirstName must be a string with a maximum length of 50."
+2019-01-23 21:38:06.5614|ERROR|ProjectMangement.Business.UserLogic|- Property: "EmployeeId", Error: "The field EmployeeId must be a string with a maximum length of 10."
+2019-01-23 21:38:58.1196|INFO|ProjectMangement.Business.UserLogic|Entity of type "Users" in state "Added" has the following validation errors:
+2019-01-23 21:40:45.2690|ERROR|ProjectMangement.Business.UserLogic|- Property: "FirstName", Error: "The field FirstName must be a string with a maximum length of 50."
+2019-01-23 21:40:46.6162|ERROR|ProjectMangement.Business.UserLogic|- Property: "EmployeeId", Error: "The field EmployeeId must be a string with a maximum length of 10."

@@ -8,28 +8,34 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using ProjectManagement.Models;
+using ProjectManagement.Entity;
+using ProjectMangement.Business;
 
 namespace ProjectManagement.Controllers
 {
     public class UsersController : ApiController
     {
-        private ProjectManagementContext db = new ProjectManagementContext();
+        private UserLogic userBL = new UserLogic();
 
         // GET: api/Users
-        public IQueryable<Users> GetUsers()
+        public List<Users> GetUsers()
         {
-            return db.Users;
+             return userBL.GetUsers(); 
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(Users))]
         public IHttpActionResult GetUsers(int id)
         {
-            Users users = db.Users.Find(id);
-            if (users == null)
+            Users users = null;
+            try
             {
-                return NotFound();
+                users = userBL.GetUsers(id);
+                if (users == null) return NotFound();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest();
             }
 
             return Ok(users);
@@ -39,32 +45,13 @@ namespace ProjectManagement.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUsers(int id, Users users)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != users.User_ID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(users).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
+                userBL.PutUsers( id, users);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!UsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -74,13 +61,14 @@ namespace ProjectManagement.Controllers
         [ResponseType(typeof(Users))]
         public IHttpActionResult PostUsers(Users users)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
-            db.Users.Add(users);
-            db.SaveChanges();
+            try {
+                userBL.PostUsers(users);
+            }
+            catch(Exception)
+            {
+                return BadRequest();
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = users.User_ID }, users);
         }
@@ -89,32 +77,19 @@ namespace ProjectManagement.Controllers
         [ResponseType(typeof(Users))]
         public IHttpActionResult DeleteUsers(int id)
         {
-            Users users = db.Users.Find(id);
-            if (users == null)
+            Users users = null;
+            try
             {
-                return NotFound();
+                users = userBL.DeleteUsers(id);
+                if(users == null) return NotFound();
             }
-            List<Tasks> taskList = db.Tasks.Where(x => x.User_ID == users.User_ID).ToList();
-           
-            db.Tasks.RemoveRange(taskList);
-            db.Users.Remove(users);
-            db.SaveChanges();
+            catch(Exception)
+            {
+                return BadRequest();
+            }
 
             return Ok(users);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool UsersExists(int id)
-        {
-            return db.Users.Count(e => e.User_ID == id) > 0;
-        }
     }
 }
