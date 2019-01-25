@@ -20,10 +20,10 @@ namespace ProjectManagement.Entity
            
         }
 
-        public System.Data.Entity.DbSet<ProjectManagement.Entity.Users> Users { get; set; }
+        public virtual System.Data.Entity.DbSet<ProjectManagement.Entity.Users> Users { get; set; }
 
-        public System.Data.Entity.DbSet<ProjectManagement.Entity.Projects> Projects { get; set; }
+        public virtual System.Data.Entity.DbSet<ProjectManagement.Entity.Projects> Projects { get; set; }
 
-        public System.Data.Entity.DbSet<ProjectManagement.Entity.Tasks> Tasks { get; set; }
+        public virtual System.Data.Entity.DbSet<ProjectManagement.Entity.Tasks> Tasks { get; set; }
     }
 }

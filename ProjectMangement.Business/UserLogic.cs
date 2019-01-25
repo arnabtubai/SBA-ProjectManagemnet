@@ -15,9 +15,14 @@ namespace ProjectMangement.Business
 {
     public class UserLogic 
     {
+
         private ProjectManagementContext db = new ProjectManagementContext();
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
+        public UserLogic() { }
+        public UserLogic(ProjectManagementContext context)
+        {
+            db = context;
+        }
         public List<Users> GetUsers()
         {
             List<Users> objUser = null;
@@ -45,7 +50,7 @@ namespace ProjectMangement.Business
 
             try
             {
-                users = db.Users.Find(id);
+                users = db.Users.Where(x=>x.User_ID==id).First();
             }
             catch(Exception ex)
             {
@@ -68,7 +73,7 @@ namespace ProjectMangement.Business
             {
                 db.Entry(users).State = EntityState.Modified;
 
-          
+                
                 db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException ex)
@@ -76,7 +81,7 @@ namespace ProjectMangement.Business
                 if (!UsersExists(id))
                 {
                     logger.Info(ex, "UserId doesn't exists");
-                    throw new Exception("Data Not found");
+                    throw ex;
                 }
                 else
                 {
@@ -159,11 +164,16 @@ namespace ProjectMangement.Business
             Users users = null;
             try
             {
-                users = db.Users.Find(id);
+                users = db.Users.Where(x=>x.User_ID ==id).First();
 
-                List<Tasks> taskList = db.Tasks.Where(x => x.User_ID == users.User_ID).ToList();
+                List<Tasks> taskList;
 
-                db.Tasks.RemoveRange(taskList);
+                if (db.Tasks != null)
+                {
+                    taskList = db.Tasks.Where(x => x.User_ID == users.User_ID).ToList();
+
+                    db.Tasks.RemoveRange(taskList);
+                }
                 db.Users.Remove(users);
                 db.SaveChanges();
             }
@@ -185,6 +195,30 @@ namespace ProjectMangement.Business
                     }
                 }
                 throw e;
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Error while deleting user");
+                throw ex;
+
+            }
+            finally
+            {
+                Dispose(true);
+            }
+            return users;
+        }
+
+        public Users DeleteUsers(string EmpId)
+        {
+            Users users = null;
+            try
+            {
+                users = db.Users.Where(x=>x.EmployeeId == EmpId).First();
+
+             
+                db.Users.Remove(users);
+                db.SaveChanges();
             }
             catch (Exception ex)
             {
