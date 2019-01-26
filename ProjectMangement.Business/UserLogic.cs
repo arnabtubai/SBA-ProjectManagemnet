@@ -126,11 +126,6 @@ namespace ProjectMangement.Business
                 db.Users.Add(users);
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                logger.Info(ex, "error while adding");
-                throw ex;
-            }
             catch (DbEntityValidationException e)
             {
                 foreach (var eve in e.EntityValidationErrors)
@@ -177,25 +172,6 @@ namespace ProjectMangement.Business
                 db.Users.Remove(users);
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                logger.Info(ex, "error while deleting");
-                throw ex;
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        logger.Error("- Property: \"{0}\", Error: \"{1}\"",
-                             ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw e;
-            }
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while deleting user");
@@ -209,29 +185,7 @@ namespace ProjectMangement.Business
             return users;
         }
 
-        public Users DeleteUsers(string EmpId)
-        {
-            Users users = null;
-            try
-            {
-                users = db.Users.Where(x=>x.EmployeeId == EmpId).First();
-
-             
-                db.Users.Remove(users);
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Error while deleting user");
-                throw ex;
-
-            }
-            finally
-            {
-                Dispose(true);
-            }
-            return users;
-        }
+     
 
         private  void Dispose(bool disposing)
         {

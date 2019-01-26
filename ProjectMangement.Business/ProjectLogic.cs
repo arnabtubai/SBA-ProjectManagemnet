@@ -16,7 +16,11 @@ namespace ProjectMangement.Business
     {
         private ProjectManagementContext db = new ProjectManagementContext();
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-
+        public ProjectLogic() { }
+        public ProjectLogic(ProjectManagementContext context)
+        {
+            db = context;
+        }
         public List<ProjectViewModel> GetProjects()
         {
             List<ProjectViewModel> ProjectView = null;
@@ -62,7 +66,7 @@ namespace ProjectMangement.Business
             ProjectViewModel ProjectView = null;
             try
             {
-                Projects projects = db.Projects.Find(id);
+                Projects projects = db.Projects.Where(x=>x.Project_ID ==id).First();
 
                 var config = new MapperConfiguration(cfg =>
                 {
@@ -109,7 +113,7 @@ namespace ProjectMangement.Business
                 if (!ProjectsExists(id))
                 {
                     logger.Info(ex, "ProjectId doesn't exists");
-                    throw new Exception("Data Not found");
+                    throw ex;
                 }
                 else
                 {
@@ -150,7 +154,7 @@ namespace ProjectMangement.Business
                 db.Projects.Add(projects);
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateException ex)
             {
                 logger.Info(ex, "error while adding");
                 throw ex;
@@ -188,30 +192,15 @@ namespace ProjectMangement.Business
 
             try
             {
-                Projects = db.Projects.Find(id);
-                List<Tasks> lTask = db.Tasks.Where(z => z.Project_ID == Projects.Project_ID).ToList();
-                db.Tasks.RemoveRange(lTask);
+                Projects = db.Projects.Where(x => x.Project_ID == id).First();
+
+                if (db.Tasks != null)
+                {
+                    List<Tasks> lTask = db.Tasks.Where(z => z.Project_ID == Projects.Project_ID).ToList();
+                    db.Tasks.RemoveRange(lTask);
+                }
                 db.Projects.Remove(Projects);
                 db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                logger.Info(ex, "error while deleting");
-                throw ex;
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        logger.Error("- Property: \"{0}\", Error: \"{1}\"",
-                             ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw e;
             }
             catch (Exception ex)
             {

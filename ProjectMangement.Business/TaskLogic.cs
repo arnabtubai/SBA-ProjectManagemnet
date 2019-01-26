@@ -16,6 +16,12 @@ namespace ProjectMangement.Business
     {
         private ProjectManagementContext db = new ProjectManagementContext();
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        public TaskLogic() { }
+
+        public TaskLogic(ProjectManagementContext obj)
+        {
+            db = obj;
+        }
         // GET: api/Tasks
         public List<TaskViewModel> GetTasks()
         {
@@ -66,7 +72,7 @@ namespace ProjectMangement.Business
             TaskViewModel TaskView = null;
             try
             {
-                Tasks Tasks = db.Tasks.Find(id);
+                Tasks Tasks = db.Tasks.Where(x=>x.Task_ID==id).First();
                 var config = new MapperConfiguration(cfg =>
                 {
 
@@ -112,7 +118,7 @@ namespace ProjectMangement.Business
                 if (!TasksExists(id))
                 {
                     logger.Info(ex, "TaskId doesn't exists");
-                    throw new Exception("Data Not found");
+                    throw ex;
                 }
                 else
                 {
@@ -154,7 +160,7 @@ namespace ProjectMangement.Business
                 db.Tasks.Add(Tasks);
                 db.SaveChanges();
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateException ex)
             {
                 logger.Info(ex, "error while adding");
                 throw ex;
@@ -192,31 +198,17 @@ namespace ProjectMangement.Business
           
             try
             {
-                Tasks= db.Tasks.Find(id);
+                Tasks= db.Tasks.Where(x => x.Task_ID == id).First();
                 db.Tasks.Remove(Tasks);
                 db.SaveChanges();
 
             }
-            catch (DbUpdateConcurrencyException ex)
+            catch (DbUpdateException ex)
             {
                 logger.Info(ex, "error while deleting");
                 throw ex;
             }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        logger.Error("- Property: \"{0}\", Error: \"{1}\"",
-                             ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw e;
-            }
-            catch (Exception ex)
+           catch (Exception ex)
             {
                 logger.Error(ex, "Error while deleting task");
                 throw ex;
