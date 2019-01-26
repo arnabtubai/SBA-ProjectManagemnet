@@ -96,7 +96,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while getting task list" + ex.Message);
-                throw new Exception("Error while getting task list");
+                throw new Exception("Error while getting task list.Please contact admin.");
             }
             finally
             {
@@ -166,7 +166,7 @@ namespace ProjectMangement.Business
             catch (DbUpdateException ex)
             {
                 logger.Info("error while adding" + ex.Message);
-                throw new DbUpdateException("error while adding");
+                throw new DbUpdateException("Error while adding task.Please contact admin.");
             }
             catch (DbEntityValidationException e)
             {
@@ -189,7 +189,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while adding Tasks" + ex.Message);
-                throw new Exception("Error while adding Tasks");
+                throw new Exception("Error while adding Tasks.Please contact admin.");
 
             }
             finally
@@ -214,7 +214,7 @@ namespace ProjectMangement.Business
            catch (Exception ex)
             {
                 logger.Error(ex, "Error while deleting task"+ex.Message);
-                throw new Exception("Error while deleting task");
+                throw new Exception("Error while deleting task.Please contact admin.");
 
             }
             finally

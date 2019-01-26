@@ -32,7 +32,7 @@ namespace ProjectMangement.Business
             }
             catch(Exception ex)
             {
-                logger.Error(ex, "Error while getting user list");
+                logger.Error(ex, "Error while getting user list.Please contact admin.");
                 throw ex;
 
             }
@@ -55,7 +55,7 @@ namespace ProjectMangement.Business
             catch(Exception ex)
             {
                 logger.Error(ex, "Error while getting user list:"+ex.Message);
-                throw new Exception("Error while getting user list");
+                throw new Exception("Error while getting user list.Please contact admin.");
             }
             finally
             {
@@ -109,7 +109,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while updating user"+ex.Message);
-                throw new Exception("Error while updating user");
+                throw new Exception("Error while updating user.Please contact admin.");
             }
             finally
             {

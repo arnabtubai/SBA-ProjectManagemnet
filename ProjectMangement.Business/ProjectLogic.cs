@@ -50,7 +50,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while getting full project list"+ex.Message);
-                throw new Exception("Error while getting full project list");
+                throw new Exception("Error while getting full project list.Please contact admin.");
 
             }
             finally
@@ -90,7 +90,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while getting project list"+ex.Message);
-                throw new Exception("Error while getting project list");
+                throw new Exception("Error while getting project list.Please contact admin.");
             }
             finally
             {
@@ -141,7 +141,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while updating project"+ex.Message);
-                throw new Exception("Error while updating project");
+                throw new Exception("Error while updating project.Please contact admin.");
 
             }
             finally
@@ -160,7 +160,7 @@ namespace ProjectMangement.Business
             catch (DbUpdateException ex)
             {
                 logger.Info("error while adding"+ex.Message);
-                throw new DbUpdateException("error while adding");
+                throw new DbUpdateException("Error while adding project.Please contact admin.");
             }
             catch (DbEntityValidationException e)
             {
@@ -182,7 +182,7 @@ namespace ProjectMangement.Business
             catch (Exception ex)
             {
                 logger.Error(ex, "Error while adding project"+ex.Message);
-                throw new Exception("Error while adding project");
+                throw new Exception("Error while adding project.Please contact admin.");
 
             }
             finally
