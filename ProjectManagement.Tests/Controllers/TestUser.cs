@@ -30,10 +30,10 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-        NumberOfIterations = 10, RunMode = RunMode.Throughput,
+        NumberOfIterations = 500, RunMode = RunMode.Throughput,
         RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 100.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 2000000.0d)]
         [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
         public void TestGetAllUsers()
         {
@@ -84,10 +84,10 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-       NumberOfIterations = 10, RunMode = RunMode.Throughput,
+       NumberOfIterations = 500, RunMode = RunMode.Throughput,
        RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 100.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 2000000.0d)]
         [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
         public void TestGetAllUserID()
         {
@@ -186,10 +186,10 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-       NumberOfIterations = 10, RunMode = RunMode.Throughput,
+       NumberOfIterations = 500, RunMode = RunMode.Throughput,
        RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 100.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated,MustBe.LessThan, 2000000.0d)]
         [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
         public void TestDeleteUser_HappyPath()
         {
@@ -334,10 +334,10 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-      NumberOfIterations = 10, RunMode = RunMode.Throughput,
+      NumberOfIterations = 500, RunMode = RunMode.Throughput,
       RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 100.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 2500000.0d)]
         [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
         public void TestAddUser_HappyPath()
         {

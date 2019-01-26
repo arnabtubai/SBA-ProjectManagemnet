@@ -33,9 +33,9 @@ namespace ProjectManagement.Controllers
                 users = userBL.GetUsers(id);
                 if (users == null) return NotFound();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok(users);
@@ -49,9 +49,9 @@ namespace ProjectManagement.Controllers
             {
                 userBL.PutUsers( id, users);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -65,9 +65,9 @@ namespace ProjectManagement.Controllers
             try {
                 userBL.PostUsers(users);
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return CreatedAtRoute("DefaultApi", new { id = users.User_ID }, users);
@@ -83,9 +83,9 @@ namespace ProjectManagement.Controllers
                 users = userBL.DeleteUsers(id);
                 if(users == null) return NotFound();
             }
-            catch(Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok(users);

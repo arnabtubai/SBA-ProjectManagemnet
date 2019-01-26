@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Foolproof;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace ProjectManagement.Entity
         public string Project { get; set; }
 
         public DateTime? StartDate { get; set; }
-
+        [GreaterThan("StartDate",ErrorMessage ="Start Date cannot be greater than End date.")]
         public DateTime? EndDate { get; set; }
 
         public int Priority { get; set; }

@@ -51,8 +51,8 @@ namespace ProjectMangement.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while getting task list");
-                throw ex;
+                logger.Error(ex, "Error while getting task full list"+ex.Message);
+                throw new Exception("Error while getting task full list");
 
             }
             finally
@@ -95,8 +95,8 @@ namespace ProjectMangement.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while getting task list");
-                throw ex;
+                logger.Error(ex, "Error while getting task list" + ex.Message);
+                throw new Exception("Error while getting task list");
             }
             finally
             {
@@ -118,16 +118,17 @@ namespace ProjectMangement.Business
                 if (!TasksExists(id))
                 {
                     logger.Info(ex, "TaskId doesn't exists");
-                    throw ex;
+                    throw new DbUpdateConcurrencyException("TaskId doesn't exists");
                 }
                 else
                 {
-                    logger.Info(ex, "TaskId already exists");
-                    throw ex;
+                    logger.Info(ex, "TaskId already exists"+ex.Message);
+                    throw new DbUpdateConcurrencyException("TaskId already exists");
                 }
             }
             catch (DbEntityValidationException e)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
                     logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
@@ -136,14 +137,16 @@ namespace ProjectMangement.Business
                     {
                         logger.Error("- Property: \"{0}\", Error: \"{1}\"",
                              ve.PropertyName, ve.ErrorMessage);
+                        sb.AppendLine(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage));
                     }
                 }
-                throw e;
+                throw new DbEntityValidationException(sb.ToString());
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while updating task");
-                throw ex;
+                logger.Error(ex, "Error while updating task"+ex.Message);
+                throw new Exception("Error while updating task");
 
             }
             finally
@@ -162,11 +165,12 @@ namespace ProjectMangement.Business
             }
             catch (DbUpdateException ex)
             {
-                logger.Info(ex, "error while adding");
-                throw ex;
+                logger.Info("error while adding" + ex.Message);
+                throw new DbUpdateException("error while adding");
             }
             catch (DbEntityValidationException e)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
                     logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
@@ -175,14 +179,17 @@ namespace ProjectMangement.Business
                     {
                         logger.Error("- Property: \"{0}\", Error: \"{1}\"",
                              ve.PropertyName, ve.ErrorMessage);
+                        sb.AppendLine(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage));
                     }
                 }
-                throw e;
+                throw new DbEntityValidationException(sb.ToString());
+
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while adding Tasks");
-                throw ex;
+                logger.Error(ex, "Error while adding Tasks" + ex.Message);
+                throw new Exception("Error while adding Tasks");
 
             }
             finally
@@ -203,15 +210,11 @@ namespace ProjectMangement.Business
                 db.SaveChanges();
 
             }
-            catch (DbUpdateException ex)
-            {
-                logger.Info(ex, "error while deleting");
-                throw ex;
-            }
+           
            catch (Exception ex)
             {
-                logger.Error(ex, "Error while deleting task");
-                throw ex;
+                logger.Error(ex, "Error while deleting task"+ex.Message);
+                throw new Exception("Error while deleting task");
 
             }
             finally

@@ -54,8 +54,8 @@ namespace ProjectMangement.Business
             }
             catch(Exception ex)
             {
-                logger.Error(ex, "Error while getting user list");
-                throw ex;
+                logger.Error(ex, "Error while getting user list:"+ex.Message);
+                throw new Exception("Error while getting user list");
             }
             finally
             {
@@ -81,33 +81,35 @@ namespace ProjectMangement.Business
                 if (!UsersExists(id))
                 {
                     logger.Info(ex, "UserId doesn't exists");
-                    throw ex;
+                    throw new DbUpdateConcurrencyException("UserId doesn't exists");
                 }
                 else
                 {
-                    logger.Info(ex, "UserId already exists");
-                    throw ex;
+                    logger.Info(ex, "UserId already exists"+ex.Message);
+                    throw new DbUpdateConcurrencyException("UserId already exists");
                 }
             }
             catch (DbEntityValidationException e)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
                     logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
                         eve.Entry.Entity.GetType().Name, eve.Entry.State);
                     foreach (var ve in eve.ValidationErrors)
                     {
-                       logger.Error("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
+                        logger.Error("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage);
+                        sb.AppendLine(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage));
                     }
                 }
-                throw e;
+                throw new DbEntityValidationException(sb.ToString());
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while updating user");
-                throw ex;
-
+                logger.Error(ex, "Error while updating user"+ex.Message);
+                throw new Exception("Error while updating user");
             }
             finally
             {
@@ -128,6 +130,7 @@ namespace ProjectMangement.Business
             }
             catch (DbEntityValidationException e)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
                     logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
@@ -136,14 +139,16 @@ namespace ProjectMangement.Business
                     {
                         logger.Error("- Property: \"{0}\", Error: \"{1}\"",
                              ve.PropertyName, ve.ErrorMessage);
+                        sb.AppendLine(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage));
                     }
                 }
-                throw e;
+                throw new DbEntityValidationException(sb.ToString());
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while adding user");
-                throw ex;
+                logger.Error(ex, "Error while adding user"+ex.Message);
+                throw new Exception("Error while adding user") ;
 
             }
             finally
@@ -174,8 +179,8 @@ namespace ProjectMangement.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while deleting user");
-                throw ex;
+                logger.Error(ex, "Error while deleting user"+ex.Message);
+                throw new Exception("Error while deleting user");
 
             }
             finally

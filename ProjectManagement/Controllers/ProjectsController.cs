@@ -33,9 +33,9 @@ namespace ProjectManagement.Controllers
                 project = projectBL.GetProjects(id);
                 if (project == null) return NotFound();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok(project);
@@ -49,9 +49,9 @@ namespace ProjectManagement.Controllers
             {
                projectBL.PutProjects(id, projects);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -65,9 +65,9 @@ namespace ProjectManagement.Controllers
             {
                 projectBL.PostProjects(projects);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
             return CreatedAtRoute("DefaultApi", new { id = projects.Project_ID }, projects);
         }
@@ -82,9 +82,9 @@ namespace ProjectManagement.Controllers
                 project = projectBL.DeleteProjects(id);
                 if (project == null) return NotFound();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok(project);

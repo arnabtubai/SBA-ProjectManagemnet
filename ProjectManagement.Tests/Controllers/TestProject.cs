@@ -28,11 +28,11 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-        NumberOfIterations = 10, RunMode = RunMode.Throughput,
+        NumberOfIterations = 500, RunMode = RunMode.Throughput,
         RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryAssertion(MemoryMetric.TotalBytesAllocated,MustBe.LessThan,20000000000d)]
-        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 40.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 3500000.0d)]
+        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.LessThan, 3.0d)]
         public void TestGetAllProjects()
         {
 
@@ -80,11 +80,11 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-       NumberOfIterations = 10, RunMode = RunMode.Throughput,
+       NumberOfIterations = 500, RunMode = RunMode.Throughput,
        RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 40.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 3500000.0d)]
+        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.LessThan, 3.0d)]
         public void TestGetAllProjectId()
         {
 
@@ -176,11 +176,11 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-       NumberOfIterations = 10, RunMode = RunMode.Throughput,
+       NumberOfIterations = 500, RunMode = RunMode.Throughput,
        RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 40.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 3500000.0d)]
+        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.LessThan, 3.0d)]
         public void TestDeleteProject_HappyPath()
         {
 
@@ -361,11 +361,11 @@ namespace ProjectManagement.Tests.Controllers
         //[ExpectedException (typeof(DbUpdateConcurrencyException),)]
         //[ExpectedException(typeof(DbEntityValidationException))]
         [PerfBenchmark(Description = "Test to ensure that a minimal throughput test can be rapidly executed.",
-      NumberOfIterations = 10, RunMode = RunMode.Throughput,
+      NumberOfIterations = 500, RunMode = RunMode.Throughput,
       RunTimeMilliseconds = 1000, TestMode = TestMode.Test)]
-        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 1000000.0d)]
-        [MemoryMeasurement(MemoryMetric.TotalBytesAllocated)]
-        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.ExactlyEqualTo, 0.0d)]
+        [CounterThroughputAssertion("MyCounter", MustBe.GreaterThan, 40.0d)]
+        [MemoryAssertion(MemoryMetric.TotalBytesAllocated, MustBe.LessThan, 3500000.0d)]
+        [GcTotalAssertion(GcMetric.TotalCollections, GcGeneration.Gen2, MustBe.LessThan, 3.0d)]
         public void TestAddProject_HappyPath()
         {
 

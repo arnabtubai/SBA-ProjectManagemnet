@@ -34,9 +34,9 @@ namespace ProjectManagement.Controllers
                 task = taskBL.GetTasks(id);
                 if (task == null) return NotFound();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok(task);
@@ -50,9 +50,9 @@ namespace ProjectManagement.Controllers
             {
                 taskBL.PutTasks(id, Tasks);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -66,9 +66,9 @@ namespace ProjectManagement.Controllers
             {
                 taskBL.PostTasks(Tasks);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return CreatedAtRoute("DefaultApi", new { id = Tasks.Task_ID }, Tasks);
@@ -84,9 +84,9 @@ namespace ProjectManagement.Controllers
                 tasks =taskBL.DeleteTasks(id);
                 if (tasks == null) return NotFound();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
 
             return Ok(tasks);

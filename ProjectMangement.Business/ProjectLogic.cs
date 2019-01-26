@@ -49,8 +49,8 @@ namespace ProjectMangement.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while getting project list");
-                throw ex;
+                logger.Error(ex, "Error while getting full project list"+ex.Message);
+                throw new Exception("Error while getting full project list");
 
             }
             finally
@@ -89,8 +89,8 @@ namespace ProjectMangement.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while getting task list");
-                throw ex;
+                logger.Error(ex, "Error while getting project list"+ex.Message);
+                throw new Exception("Error while getting project list");
             }
             finally
             {
@@ -112,17 +112,18 @@ namespace ProjectMangement.Business
             {
                 if (!ProjectsExists(id))
                 {
-                    logger.Info(ex, "ProjectId doesn't exists");
-                    throw ex;
+                    logger.Info(ex, "ProjectId doesn't exists"+ex.Message);
+                    throw new DbUpdateConcurrencyException("ProjectId doesn't exists");
                 }
                 else
                 {
-                    logger.Info(ex, "ProjectId already exists");
-                    throw ex;
+                    logger.Info("ProjectId already exists" +ex.Message);
+                    throw new DbUpdateConcurrencyException("ProjectId already exists");
                 }
             }
             catch (DbEntityValidationException e)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
                     logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
@@ -131,14 +132,16 @@ namespace ProjectMangement.Business
                     {
                         logger.Error("- Property: \"{0}\", Error: \"{1}\"",
                              ve.PropertyName, ve.ErrorMessage);
+                        sb.AppendLine(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage));
                     }
                 }
-                throw e;
+                throw new DbEntityValidationException(sb.ToString());
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while updating project");
-                throw ex;
+                logger.Error(ex, "Error while updating project"+ex.Message);
+                throw new Exception("Error while updating project");
 
             }
             finally
@@ -156,11 +159,12 @@ namespace ProjectMangement.Business
             }
             catch (DbUpdateException ex)
             {
-                logger.Info(ex, "error while adding");
-                throw ex;
+                logger.Info("error while adding"+ex.Message);
+                throw new DbUpdateException("error while adding");
             }
             catch (DbEntityValidationException e)
             {
+                StringBuilder sb = new StringBuilder();
                 foreach (var eve in e.EntityValidationErrors)
                 {
                     logger.Info("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
@@ -169,14 +173,16 @@ namespace ProjectMangement.Business
                     {
                         logger.Error("- Property: \"{0}\", Error: \"{1}\"",
                              ve.PropertyName, ve.ErrorMessage);
+                        sb.AppendLine(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                             ve.PropertyName, ve.ErrorMessage));
                     }
                 }
-                throw e;
+                throw new DbEntityValidationException(sb.ToString());
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while adding project");
-                throw ex;
+                logger.Error(ex, "Error while adding project"+ex.Message);
+                throw new Exception("Error while adding project");
 
             }
             finally
@@ -204,8 +210,8 @@ namespace ProjectMangement.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Error while deleting project");
-                throw ex;
+                logger.Error(ex, "Error while deleting project" + ex.Message);
+                throw new Exception("Error while deleting project");
 
             }
             finally
